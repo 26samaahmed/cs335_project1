@@ -7,6 +7,8 @@
 #        Providing functions for parsing json data
 import json
 import os
+from datetime import datetime
+from pathlib import Path
 
 # Sorting algo json logs format
 #list_of_sort_logs =                     #Naming Outer Key: sortingalgorithmname_number
@@ -33,18 +35,31 @@ _radix_sort_count = 0
 ####Creating, Reading, Writing
 def create_json(file_name, file_number):
     file_extension = ".json"
-    results_directory_name = "results"
-    full_file_name = file_name + "_" + str(file_number) + file_extension
+    logs_directory_name = "logs"
 
-    full_path = os.path.join(results_directory_name, full_file_name)
+    current_time = datetime.now()
+    full_file_name = file_name + "_" + str(current_time.month) + "_" + str(current_time.day) + "|" + str(current_time.hour) + ":" + str(current_time.minute) + "." + str(current_time.second) + "_" + file_extension
 
-    try:
-        with open(full_path, "w"):
-            print("Json file " + full_path + " succesfully  created")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
 
-    return full_path
+    results_directory = Path(logs_directory_name)
+    results_directory.mkdir(parents=True, exist_ok=True)  # Create folder if it doesn't exist
+
+# Define the file path
+    file_path = results_directory / full_file_name
+
+# Create a blank JSON file
+    file_path.write_text("") 
+
+
+    #full_path = os.path.join(results_directory_name, full_file_name)
+
+#    try:
+#        with open(full_path, "w"):
+#            print("Json file " + full_path + " succesfully  created")
+#    except Exception as e:
+#        print(f"An unexpected error occurred: {e}")
+
+    return file_path
 
 
 def read_json(json_path):
@@ -63,9 +78,10 @@ def read_json(json_path):
 def write_json(json_path, sorting_log_data):
 
     try:
-        with open(json_path, "w") as json:
-            print("Json file " + json + " succesfully  opened")
-            json.dump(sorting_log_data, json)
+        with open(json_path, "w") as json_file:
+            print("Json file " + str(json_file) + " succesfully  opened")
+            json.dump(sorting_log_data, json_file)
+            
 
     except FileNotFoundError:
         print("Error: The file was not found.")
@@ -74,15 +90,70 @@ def write_json(json_path, sorting_log_data):
     
     return
 
+
+def append_json(json_path, data_to_append):
+    
+    try:
+        with open(json_path, "a") as json_file:
+            print("Json file " + str(json_file) + " succesfully  opened")
+            json.dump(data_to_append, json_file)
+            
+
+    except FileNotFoundError:
+        print("Error: The file was not found.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+    return
+
+def get_first_key(dictionary):
+    for key in dictionary:
+        return key
+    raise IndexError
+
 ####Input Data Functions
 
-def start_log(name_of_algorithm):
-    algo_index_number = determine_index_number()
-    full_log_key = name_of_algorithm + "_" + str(algo_index_number)
+def start_log(name_of_algorithm, algo_index):
+
+    full_log_key = str(algo_index) + "_" + str(name_of_algorithm)
     log_dictionary = {full_log_key : []}
 
 
     return log_dictionary
+
+def append_log(json_path, sort_dict, sort_step, append_list_value):
+    
+    sort_key = str(sort_step) + "_step"
+
+    #if sort_key not in sort_dict:
+    #    sort_dict[sort_key] = []
+
+    #first_key = list(sort_dict)[0]
+
+    first_key = get_first_key(sort_dict)
+    print(first_key)
+    #first_val = list(sort_dict.values())[0]
+    #print(first_val)
+
+    sort_dict[first_key] = append_list_value
+
+    new_val = list(sort_dict.values())[0]
+
+    new_dict_to_append = {first_key : new_val}
+
+    print(new_val)
+
+    append_json(json_path,new_dict_to_append)
+
+    #if isinstance(sort_dict.get(sort_key), list):
+    
+    #key_ref = sort_dict.get({sort_key:sort_list})
+    #print(key_ref)
+
+    #sort_dict[sort_key].append(sort_list)
+
+    return sort_key
+
 
 def input_log():
 
@@ -109,5 +180,19 @@ def pack_data():
 
 
 ##################Testing Block##############################################################
-new_file_path = create_json("test_file",00)
-print(new_file_path)
+new_json_path = create_json("log",00)
+print(new_json_path)
+
+new_log = start_log("merge", 00)
+print(new_log)
+
+new_key = append_log(new_json_path,new_log,0,[1,0,2,3,4,9])
+print(new_log)
+
+new_key = append_log(new_json_path,new_log,1,[0,1,2,3,4,9])
+print(new_log)
+
+new_key = append_log(new_json_path,new_log,1,[9,8,7,6,5,4,3,2,1])
+print(new_log)
+
+#write_json(new_json_path,new_log)
