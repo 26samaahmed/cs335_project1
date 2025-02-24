@@ -9,6 +9,7 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
+import time
 
 # Sorting algo json logs format
 #list_of_sort_logs =                     #Naming Outer Key: sortingalgorithmname_number
@@ -138,6 +139,7 @@ def start_log():
 
     return log_dictionary
 
+
 def append_log(json_path, sort_dict, sort_step, sort_type, append_list_value):
     
     print(f"Sort Step {sort_step}")
@@ -186,16 +188,6 @@ def append_log(json_path, sort_dict, sort_step, sort_type, append_list_value):
     return sort_key
 
 
-def input_log():
-
-
-    return
-
-def determine_index_number():
-
-    return
-
-
 ####Packing data functions
 ####
 
@@ -203,6 +195,35 @@ def pack_data():
 
     return
 
+def convert_list_to_tuple(sortlist_of_dict):
+    
+    key = get_first_key(sortlist_of_dict)
+
+    value = sortlist_of_dict[key]
+
+    split_key = key.split("_")
+
+    step_count = split_key[0]
+
+    sort_type = split_key[1]
+
+    #un_time = split_key[2]
+    
+    sortlist_tupple = (int(step_count),sort_type,value)
+
+
+    return  sortlist_tupple
+
+def convert_all_lists_to_tuples(sortlist_of_dicts):
+
+    list_of_tuples = []
+
+    for index in range(len(sortlist_of_dicts)):
+        list_of_tuples.append(convert_list_to_tuple(sortlist_of_dicts[index]))
+        print(f"Tuple Index{index} Contets: {list_of_tuples[index]}")
+
+
+    return list_of_tuples
 
 
 ####
@@ -242,7 +263,12 @@ print(read_dictionaries)
 print("---------------------------\n")
 print_all_dicts(read_dictionaries)
 
+new_tuple = convert_list_to_tuple(read_dictionaries[0])
+print(f"New Tuple: {new_tuple}")
 
+
+new_tuple_list = convert_all_lists_to_tuples(read_dictionaries)
+print(new_tuple_list)
 
 
 
