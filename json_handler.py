@@ -19,6 +19,11 @@ from pathlib import Path
 #
 #
 
+####Constants
+CONST_NEWLOG_NAME = "99_newlog"
+CONST_JSONL_FILE_EXT = ".jsonl"
+
+
 ####File Variables(Treat as private)
 _sorting_algorithm_name = ""
 _current_step = -1
@@ -33,8 +38,8 @@ _radix_sort_count = 0
 
 ####Json Functions
 ####Creating, Reading, Writing
-def create_json(file_name, file_number):
-    file_extension = ".json"
+def create_json(file_name):
+    file_extension = ".jsonl"
     logs_directory_name = "logs"
 
     current_time = datetime.now()
@@ -64,16 +69,19 @@ def create_json(file_name, file_number):
 
 def read_json(json_path):
 
-    try:
-        with open(json_path, "r") as json:
-            read_data = json.load(json)
+    with open(json_path, "r") as file:
 
-    except FileNotFoundError:
-        print("Error: The file was not found.")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        read_data_list = []         #read data will be held in a list of dictionaries through of a search algorithm will be its on list inside the outer list to contain everything
 
-    return read_data
+        for line in file:
+            try:
+                read_data = json.loads(line)
+                read_data_list.append(read_data)
+                print(read_data)
+            except json.JSONDecodeError as e:
+                print(f"Skipping invalid JSON line: {line.strip()} - Error: {e}")
+
+    return read_data_list
 
 def write_json(json_path, sorting_log_data):
 
@@ -97,6 +105,7 @@ def append_json(json_path, data_to_append):
         with open(json_path, "a") as json_file:
             print("Json file " + str(json_file) + " succesfully  opened")
             json.dump(data_to_append, json_file)
+            json_file.write("\n")
             
 
     except FileNotFoundError:
@@ -111,19 +120,33 @@ def get_first_key(dictionary):
         return key
     raise IndexError
 
+def print_all_dicts(list_of_dicts):
+
+    for dict in list_of_dicts:
+        print(dict)
+    return
+    
+
 ####Input Data Functions
 
-def start_log(name_of_algorithm, algo_index):
+""" name_of_algorithm, algo_index """
+def start_log():
 
-    full_log_key = str(algo_index) + "_" + str(name_of_algorithm)
+    full_log_key = CONST_NEWLOG_NAME
     log_dictionary = {full_log_key : []}
 
 
     return log_dictionary
 
-def append_log(json_path, sort_dict, sort_step, append_list_value):
+def append_log(json_path, sort_dict, sort_step, sort_type, append_list_value):
     
-    sort_key = str(sort_step) + "_step"
+    print(f"Sort Step {sort_step}")
+
+    sort_step_string = str(sort_step)
+    print(f"Sort Step String: {sort_step_string}")
+
+    sort_key = sort_step_string + "_" + sort_type
+    print(f"Sort Key: {sort_key}")
 
     #if sort_key not in sort_dict:
     #    sort_dict[sort_key] = []
@@ -131,7 +154,15 @@ def append_log(json_path, sort_dict, sort_step, append_list_value):
     #first_key = list(sort_dict)[0]
 
     first_key = get_first_key(sort_dict)
-    print(first_key)
+    print(f"first_key:before: {first_key}")
+
+    if(first_key == CONST_NEWLOG_NAME):
+        sort_dict[sort_key] = sort_dict.pop(CONST_NEWLOG_NAME)
+
+    #sort_dict[sort_key] = 
+
+    first_key = get_first_key(sort_dict)
+    print(f"first_key:after: {first_key}")
     #first_val = list(sort_dict.values())[0]
     #print(first_val)
 
@@ -139,7 +170,7 @@ def append_log(json_path, sort_dict, sort_step, append_list_value):
 
     new_val = list(sort_dict.values())[0]
 
-    new_dict_to_append = {first_key : new_val}
+    new_dict_to_append = {sort_key : new_val}
 
     print(new_val)
 
@@ -180,19 +211,39 @@ def pack_data():
 
 
 ##################Testing Block##############################################################
-new_json_path = create_json("log",00)
+
+##Creates a new jsonl file log will be standard name along with time information automatically appended, second parameter 
+new_json_path = create_json("log")
 print(new_json_path)
 
-new_log = start_log("merge", 00)
+#start log will create a new default jsonl entry
+#new_log = start_log("merge", 00)
+new_log = start_log()
 print(new_log)
 
-new_key = append_log(new_json_path,new_log,0,[1,0,2,3,4,9])
+
+print("---------------------------\n")
+#changes new_log to keep track of current status of  jsonl
+new_key = append_log(new_json_path,new_log,0,"merge",[1,0,2,3,4,9])
 print(new_log)
 
-new_key = append_log(new_json_path,new_log,1,[0,1,2,3,4,9])
+new_key = append_log(new_json_path,new_log,1,"merge",[0,1,2,3,4,9])
 print(new_log)
 
-new_key = append_log(new_json_path,new_log,1,[9,8,7,6,5,4,3,2,1])
+new_key = append_log(new_json_path,new_log,2,"merge",[9,8,7,6,5,4,3,2,1])
 print(new_log)
+
+#read jsonl
+
+read_dictionaries = read_json(new_json_path)
+print("---------------------------\n")
+print(read_dictionaries)
+
+print("---------------------------\n")
+print_all_dicts(read_dictionaries)
+
+
+
+
 
 #write_json(new_json_path,new_log)
