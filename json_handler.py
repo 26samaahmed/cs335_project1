@@ -280,7 +280,7 @@ def convert_all_lists_to_tuples(sortlist_of_dicts):
 
 
 ##################Testing Block##############################################################
-
+""" 
 ##Creates a new jsonl file log will be standard name along with time information automatically appended, second parameter 
 new_json_path = create_json("log")
 print(new_json_path)
@@ -320,4 +320,4 @@ print(new_tuple_list)
 
 
 
-#write_json(new_json_path,new_log)
+#write_json(new_json_path,new_log) """

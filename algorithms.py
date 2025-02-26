@@ -11,7 +11,7 @@ import json_handler as jhandler
 ###########################
 ####Sorting Algorithms#####
 
-#Sorting algorithms must save capture this data:
+#Sorting algorithms must save/capture this data:
 #   -list
 #   -step(index)
 #   -time stamp for each step
@@ -21,8 +21,8 @@ import json_handler as jhandler
 #Bubble Sort
 #Data Collection Functionality -DONE
 
-def bubble_sort(students,json_log_path):
-    n = len(students)
+def bubble_sort(value_list,log, json_log_path):
+    n = len(value_list)
 
     current_sort_data = {}
 
@@ -34,12 +34,15 @@ def bubble_sort(students,json_log_path):
 
         #Record data here
         current_runtime = time.time()
-        current_sort_data = jhandler.pack_data(i,"bubble",(current_runtime - start_time), students)
-        jhandler.append_json(json_log_path,current_sort_data)
+        #current_sort_data = jhandler.pack_data(i,"bubble",(current_runtime - start_time), students)
+        jhandler.append_log(json_log_path,log, i,"bubble", value_list)
 
         for j in range(0, n - i - 1):
-            if students[j][1] > students[j+1][1]:
-                students[j], students[j + 1] = students[j + 1], students[j]
+            if value_list[j] > value_list[j + 1]:  # Compare integers directly
+                    value_list[j], value_list[j + 1] = value_list[j + 1], value_list[j]
+
+"""             if students[j][1] > students[j+1][1]:
+                students[j], students[j + 1] = students[j + 1], students[j] """
 
 
 #-------------------------------------------------
@@ -222,3 +225,17 @@ def linear_search_data_collect(list, target_element,json_log_path):
 
 #-------------------------------------------------
 #-------------------------------------------------
+
+
+####Testing Function
+
+##Generates a random list(of random size 0 - 98) of integers to be sorted
+def random_input():
+    randomly_generated_input_values = []
+
+    random_size = random.randint(0,98)
+
+    for i in range(random_size):
+        randomly_generated_input_values.append(random.randint(0,100))
+
+    return randomly_generated_input_values
