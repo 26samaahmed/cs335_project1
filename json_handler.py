@@ -116,6 +116,7 @@ def append_json(json_path, data_to_append):
 
     return
 
+#How to index into a dictoinary? Stack Overflow post
 def get_first_key(dictionary):
     for key in dictionary:
         return key
@@ -187,13 +188,60 @@ def append_log(json_path, sort_dict, sort_step, sort_type, append_list_value):
 
     return sort_key
 
+def dict_append_log(json_path, packed_sort_dict):
+
+    packed_sort_dict
+
+    print(f"Sort Step {sort_step}")
+
+    sort_step_string = str(sort_step)
+    print(f"Sort Step String: {sort_step_string}")
+
+    sort_key = sort_step_string + "_" + sort_type
+    print(f"Sort Key: {sort_key}")
+
+    #if sort_key not in sort_dict:
+    #    sort_dict[sort_key] = []
+
+    #first_key = list(sort_dict)[0]
+
+    first_key = get_first_key(sort_dict)
+    print(f"first_key:before: {first_key}")
+
+    if(first_key == CONST_NEWLOG_NAME):
+        sort_dict[sort_key] = sort_dict.pop(CONST_NEWLOG_NAME)
+
+    #sort_dict[sort_key] = 
+
+    first_key = get_first_key(sort_dict)
+    print(f"first_key:after: {first_key}")
+    #first_val = list(sort_dict.values())[0]
+    #print(first_val)
+
+    sort_dict[first_key] = append_list_value
+
+    new_val = list(sort_dict.values())[0]
+
+    new_dict_to_append = {sort_key : new_val}
+
+    print(new_val)
+
+    append_json(json_path,new_dict_to_append)
+
+
+    return 
+
 
 ####Packing data functions
 ####
 
-def pack_data():
+def pack_data(sort_step,sort_type,current_runtime, value_list):
 
-    return
+    packed_key = sort_step + "_" + sort_type + "_" + current_runtime
+
+    new_dictionary = { packed_key : value_list }
+
+    return new_dictionary
 
 def convert_list_to_tuple(sortlist_of_dict):
     
@@ -232,7 +280,7 @@ def convert_all_lists_to_tuples(sortlist_of_dicts):
 
 
 ##################Testing Block##############################################################
-
+""" 
 ##Creates a new jsonl file log will be standard name along with time information automatically appended, second parameter 
 new_json_path = create_json("log")
 print(new_json_path)
@@ -272,4 +320,4 @@ print(new_tuple_list)
 
 
 
-#write_json(new_json_path,new_log)
+#write_json(new_json_path,new_log) """
