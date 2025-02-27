@@ -22,6 +22,8 @@ import json_handler as jhandler
 #Data Collection Functionality -DONE
 
 def bubble_sort(value_list,log, json_log_path):
+    print(f"Bubble Sort start: {value_list}")
+
     n = len(value_list)
 
     current_sort_data = {}
@@ -41,8 +43,12 @@ def bubble_sort(value_list,log, json_log_path):
             if value_list[j] > value_list[j + 1]:  # Compare integers directly
                     value_list[j], value_list[j + 1] = value_list[j + 1], value_list[j]
 
+    print(f"Bubble Sort end: {value_list}")
+
 """             if students[j][1] > students[j+1][1]:
                 students[j], students[j + 1] = students[j + 1], students[j] """
+
+
 
 
 #-------------------------------------------------

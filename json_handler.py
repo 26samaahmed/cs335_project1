@@ -44,7 +44,7 @@ def create_json(file_name):
     logs_directory_name = "logs"
 
     current_time = datetime.now()
-    full_file_name = file_name + "_" + str(current_time.month) + "_" + str(current_time.day) + "|" + str(current_time.hour) + ":" + str(current_time.minute) + "." + str(current_time.second) + "_" + file_extension
+    full_file_name = file_name + "_" + str(current_time.month) + "_" + str(current_time.day) + "_" + str(current_time.hour) + "_" + str(current_time.minute) + "." + str(current_time.second) + "_" + file_extension
 
 
     results_directory = Path(logs_directory_name)
@@ -188,7 +188,7 @@ def append_log(json_path, sort_dict, sort_step, sort_type, append_list_value):
 
     return sort_key
 
-def dict_append_log(json_path, packed_sort_dict):
+""" def dict_append_log(json_path, packed_sort_dict):
 
     packed_sort_dict
 
@@ -229,7 +229,7 @@ def dict_append_log(json_path, packed_sort_dict):
     append_json(json_path,new_dict_to_append)
 
 
-    return 
+    return  """
 
 
 ####Packing data functions
