@@ -168,11 +168,11 @@ entry_field.grid(row=3, column=0, columnspan=2, pady=10)
 
 
 find_value_label = Label(main_frame, text="Value to find (if needed):", font=("Courier New", 14))
-find_value_label.grid(row=3, column=0, sticky="w", padx=10, pady=5)
+find_value_label.grid(row=3, column=0, sticky="w")
 
 # Entry box for user to type the value (same row as label)
 find_value_entry = Entry(main_frame, font=("Courier New", 14), width=10)
-find_value_entry.grid(row=3, column=1, sticky="w", padx=10, pady=5)
+find_value_entry.grid(row=3, column=1, sticky="w")
 
 
 # Randomizer Entry Fields (will be shown when random option is selected)
