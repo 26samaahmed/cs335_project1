@@ -1,3 +1,6 @@
+# GUI Developer: Sama Ahmed
+# Date Started: 2-22-25
+
 from tkinter import *
 import random
 import json_handler as jhandler
