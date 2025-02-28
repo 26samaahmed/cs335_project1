@@ -2,6 +2,7 @@ from tkinter import *
 import random
 import json_handler as jhandler
 import algorithms as algo
+import visualization as visual
 
 _current_input = []
 _num_of_algos = 5
@@ -106,6 +107,10 @@ def main_control(algorithms_to_run, value_to_sort):
 
     main_run_sorts(value_to_sort,algorithms_to_run,new_log,new_json_path,new_random_target)
 
+    algos_to_use = get_algos_to_run(v_linear,v_bubble,v_merge, v_quick, v_radix)
+
+    call_visualizer(new_json_path,algos_to_use)
+
     return 0
 
 ##Runs sorts based off of the input from the 
@@ -153,6 +158,36 @@ def pick_random_target(value_list):
     rand_target = random.choice(value_list)
 
     return rand_target
+
+def call_visualizer(json_log_path, algorithms_to_visualize):
+
+    if(algorithms_to_visualize[0] == 1):
+        print("Attempting Linear Visualization")
+        visual.plot_sorting_animation_from_json(json_log_path,"Linear Search Algorithm")
+
+
+    if(algorithms_to_visualize[1] == 1):
+        print("Attempting Bubble Visualization")
+        visual.plot_sorting_animation_from_json(json_log_path,"Bubble Sort")
+
+
+    if(algorithms_to_visualize[2] == 1):
+        print("Attempting Merge Visualization") 
+        visual.plot_sorting_animation_from_json(json_log_path,"Merge Sort")
+
+
+    if(algorithms_to_visualize[3] == 1):
+        print("Attempting Quick Visualization")
+        visual.plot_sorting_animation_from_json(json_log_path,"Quick Sort")
+
+
+    if(algorithms_to_visualize[4] == 1):
+        print("Attempting Radix Visualization") 
+        visual.plot_sorting_animation_from_json(json_log_path,"Radix Sort")
+
+
+
+    return
 
 
 root = Tk()
