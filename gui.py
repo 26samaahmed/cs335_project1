@@ -177,22 +177,22 @@ find_value_entry.grid(row=4, column=1, sticky="w", padx=5)
 
 # Randomizer Entry Fields (will be shown when random option is selected)
 min_label = Label(main_frame, text="Minimum Value:", font=("Courier New", 14), justify='left')
-min_label.grid(row=4, column=0, sticky="w")
+min_label.grid(row=5, column=0, sticky="w")
 
 min_entry = Entry(main_frame, font=("Courier New", 14), width=4)
-min_entry.grid(row=4, column=1)
+min_entry.grid(row=5, column=1)
 
 max_label = Label(main_frame, text="Maximum Value:", font=("Courier New", 14))
-max_label.grid(row=5, column=0, sticky="w")
+max_label.grid(row=6, column=0, sticky="w")
 
 max_entry = Entry(main_frame, font=("Courier New", 14), width=4)
-max_entry.grid(row=5, column=1)
+max_entry.grid(row=6, column=1)
 
 num_elements_label = Label(main_frame, text="Number of Elements:", font=("Courier New", 14))
-num_elements_label.grid(row=6, column=0, sticky="w")
+num_elements_label.grid(row=7, column=0, sticky="w")
 
 num_elements_entry = Entry(main_frame, font=("Courier New", 14), width=4)
-num_elements_entry.grid(row=6, column=1)
+num_elements_entry.grid(row=7, column=1)
 
 # Initially hide randomizer fields
 min_entry.grid_remove()
