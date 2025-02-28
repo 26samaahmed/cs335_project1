@@ -166,13 +166,13 @@ radio_random.grid(row=2, column=0, sticky="w")
 entry_field = Entry(main_frame, font=("Courier New", 14))
 entry_field.grid(row=3, column=0, columnspan=2, pady=10)
 
-
+# Corrected label placement (column 0 instead of 1)
 find_value_label = Label(main_frame, text="Value to find (if needed):", font=("Courier New", 14))
-find_value_label.grid(row=3, column=0, sticky="w")
+find_value_label.grid(row=4, column=0, sticky="w", padx=5)
 
-# Entry box for user to type the value (same row as label)
+# Entry box remains in column 1
 find_value_entry = Entry(main_frame, font=("Courier New", 14), width=10)
-find_value_entry.grid(row=3, column=1, sticky="w")
+find_value_entry.grid(row=4, column=1, sticky="w", padx=5)
 
 
 # Randomizer Entry Fields (will be shown when random option is selected)
