@@ -162,41 +162,49 @@ def merge_sort(value_list, log, json_log_path, start_time=None):
 
 #Quick Sort
 #Data Collection functionality - TODO
-def quick_sort(arr, side_string, step, start_time, json_log_path):
+def quick_sort(arr, side_string, step, start_time, json_log_path,log):
 
-    current_sort_data = {}
-
-    current_runtime = (time.time()) - start_time
-
+    current_runtime = (time.time()) - start_time        #Variables for logging
     step += 1
-
     sort_type_string = "quick" + side_string
 
-    current_sort_data = jhandler.pack_data(step, sort_type_string, current_runtime, arr)
-    jhandler.append_json(json_log_path, current_sort_data)
+
+    jhandler.append_log(json_log_path,log,step,sort_type_string,current_runtime,arr)
 
     if len(arr) <= 1:
         return arr
     
 
     pivot = arr[len(arr) // 2]
+
+
     left = [x for x in arr if x < pivot]
+    current_runtime = (time.time()) - start_time 
+    jhandler.append_log(json_log_path,log,step,sort_type_string,current_runtime,left)
+
     middle = [x for x in arr if x == pivot]
+    current_runtime = (time.time()) - start_time 
+    jhandler.append_log(json_log_path,log,step,sort_type_string,current_runtime,middle)
+
+
     right = [x for x in arr if x > pivot]
+    current_runtime = (time.time()) - start_time 
+    jhandler.append_log(json_log_path,log,step,sort_type_string,current_runtime,right)
+
 
     return quick_sort(left, "Left", step, start_time,json_log_path) + middle + quick_sort(right, "Right", step, start_time,json_log_path)
 
 
-def quick_sort_data_collect(arr,json_log_path):
+def quick_sort_data_collect(arr,json_log_path, log):
 
     start_time = time.time()
 
-    quick_sort_result = quick_sort(arr, "start" , 0, start_time,json_log_path)
+    quick_sort_result = quick_sort(arr, "start" , 0, start_time,json_log_path,log)
 
-    total_runtime = (time.time()) - start_time
+    #total_runtime = (time.time()) - start_time
 
-    current_sort_data = jhandler.pack_data(999,"quick-complete",  total_runtime, quick_sort_result)
-    jhandler.append_json(json_log_path,current_sort_data)
+    #current_sort_data = jhandler.pack_data(999,"quick-complete",  total_runtime, quick_sort_result)
+    #jhandler.append_json(json_log_path,current_sort_data)
 
     return 
 
