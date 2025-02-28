@@ -247,7 +247,7 @@ def append_log(json_path, sort_dict, sort_step, sort_type,current_runtime, appen
 
 def pack_data(sort_step,sort_type,current_runtime, value_list):
 
-    packed_key = sort_step + "_" + sort_type + "_" + current_runtime
+    packed_key = str(sort_step) + "_" + sort_type + "_" + str(current_runtime)
 
     new_dictionary = { packed_key : value_list }
 

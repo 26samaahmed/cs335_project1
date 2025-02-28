@@ -170,7 +170,7 @@ def quick_sort(arr, side_string, step, start_time, json_log_path):
 
     step += 1
 
-    sort_type_string = "quick-" + side_string
+    sort_type_string = "quick" + side_string
 
     current_sort_data = jhandler.pack_data(step, sort_type_string, current_runtime, arr)
     jhandler.append_json(json_log_path, current_sort_data)
@@ -184,7 +184,7 @@ def quick_sort(arr, side_string, step, start_time, json_log_path):
     middle = [x for x in arr if x == pivot]
     right = [x for x in arr if x > pivot]
 
-    return quick_sort(left, "left", step, start_time,json_log_path) + middle + quick_sort(right, "right", step, start_time,json_log_path)
+    return quick_sort(left, "Left", step, start_time,json_log_path) + middle + quick_sort(right, "Right", step, start_time,json_log_path)
 
 
 def quick_sort_data_collect(arr,json_log_path):
