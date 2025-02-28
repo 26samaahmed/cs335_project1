@@ -3,17 +3,13 @@ import random
 import json_handler as jhandler
 import algorithms as algo
 
-##Robbie's addition
 _current_input = []
 _num_of_algos = 5
 _current_algos = [0] * _num_of_algos
 _search_element = []
 
-
-
 def modify_globals():
     global _current_input, _current_algos, _search_element
-##Robbie's addition end
 
 def submit_input():
     """Submit the user input and process it."""
@@ -23,17 +19,12 @@ def submit_input():
             # Convert the input string into a list of integers
             input_list = list(map(int, user_input.split()))
 
-            ###Robbie's change
             #Collects data to be passed to controller loop -> handler -> visualizer
             algo_list_values_to_sort = input_list
             print(f"Value list: {algo_list_values_to_sort}")
             algos_to_use = get_algos_to_run(v_linear,v_bubble,v_merge, v_quick, v_radix)
             main_control(algos_to_use, algo_list_values_to_sort)
             
-            ###Robbie's change end
-
-            # Display Output on Terminal, can be redirected to a file
-            #print("Input List:", input_list)
         except ValueError:
             print("Please enter valid integers.")
     elif v.get() == 2:  # If the user wants randomized values within a specific range
@@ -75,7 +66,6 @@ def generate_random_values():
         max_label.grid_remove()
         num_elements_label.grid_remove()
 
-##Robbie's addition
 #Should pass along values from the checkboxes to determine which algos to run when submit is hit
 def get_algos_to_run(linear,bubble, merge, quick, radix):
 
@@ -151,9 +141,6 @@ def main_run_sorts(sort_input, algo_input, log, json_log_path, linear_target):
     return
 
 
-##Robbie's addition end
-
-
 root = Tk()
 root.title("Sorting Algorithm Project 1 Team 3")
 root.geometry('700x550')
@@ -169,7 +156,7 @@ main_frame.pack(pady=20)
 Label(main_frame, text="Input Section", font=("Courier New", 15, "bold")).grid(row=0, column=0, columnspan=2)
 
 # Asking user to choose input method
-radio_manual = Radiobutton(main_frame, text="Enter your values", font=("Courier New", 14), variable=v, value=1, command=generate_random_values)
+radio_manual = Radiobutton(main_frame, text="Enter your values", font=("Courier New", 14), variable=v, value=1)
 radio_manual.grid(row=1, column=0, sticky="w")
 
 radio_random = Radiobutton(main_frame, text="Generate random values", font=("Courier New", 14), variable=v, value=2, command=generate_random_values)
@@ -178,6 +165,15 @@ radio_random.grid(row=2, column=0, sticky="w")
 # Entry field for user-chosen input
 entry_field = Entry(main_frame, font=("Courier New", 14))
 entry_field.grid(row=3, column=0, columnspan=2, pady=10)
+
+
+find_value_label = Label(main_frame, text="Value to find (if needed):", font=("Courier New", 14))
+find_value_label.grid(row=3, column=0, sticky="w", padx=10, pady=5)
+
+# Entry box for user to type the value (same row as label)
+find_value_entry = Entry(main_frame, font=("Courier New", 14), width=10)
+find_value_entry.grid(row=3, column=1, sticky="w", padx=10, pady=5)
+
 
 # Randomizer Entry Fields (will be shown when random option is selected)
 min_label = Label(main_frame, text="Minimum Value:", font=("Courier New", 14), justify='left')
@@ -206,8 +202,6 @@ min_label.grid_remove()
 max_label.grid_remove()
 num_elements_label.grid_remove()
 
-submit_button = Button(main_frame, text="Submit", font=("Courier New", 14), command=submit_input)
-submit_button.grid(row=7, column=0, columnspan=2, pady=10)
 
 v_linear = BooleanVar()
 v_bubble = BooleanVar()
@@ -219,6 +213,9 @@ algorithm_frame = Frame(root, bd=2, relief="solid", padx=10, pady=10)
 algorithm_frame.pack(padx=20, pady=20)
 
 linear_search = Checkbutton(algorithm_frame, text="Linear Search", font=("Courier New", 14), variable=v_linear)
+# if linear search is selected, we need to get the target value so add a new box to choose target value that needs to be found
+linear_search_target = Entry(algorithm_frame, font=("Courier New", 14), width=4)
+
 linear_search.grid(row=0, column=0, sticky="w", padx=10, pady=5)
 
 bubble_sort = Checkbutton(algorithm_frame, text="Bubble Sort", font=("Courier New", 14), variable=v_bubble)
@@ -233,5 +230,7 @@ quick_sort.grid(row=1, column=0, sticky="w", padx=10, pady=5)
 radix_sort = Checkbutton(algorithm_frame, text="Radix Sort", font=("Courier New", 14), variable=v_radix)
 radix_sort.grid(row=1, column=1, sticky="w", padx=10, pady=5)
 
+submit_button = Button(root, text="Submit", font=("Courier New", 14), command=submit_input)
+submit_button.pack(pady=10)
 
 root.mainloop()
