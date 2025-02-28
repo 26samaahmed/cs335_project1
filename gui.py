@@ -135,7 +135,7 @@ def main_run_sorts(sort_input, algo_input, log, json_log_path, linear_target):
 
     if(algo_input[2] == 1):
         print("Executing merge")
-        algo.merge_sort(sort_input)         #merge sort parameters need to be updated - TODO
+        algo.merge_sort(sort_input, log,json_log_path)
         sort_input = original_sort_list
 
     if(algo_input[3] == 1):

@@ -21,8 +21,9 @@ import time
 #
 
 ####Constants
-CONST_NEWLOG_NAME = "99_newlog"
+CONST_NEWLOG_NAME = "99_newlog_0"
 CONST_JSONL_FILE_EXT = ".jsonl"
+CONST_LOG_RUNTIME_PRECISION = 10
 
 
 ####File Variables(Treat as private)
@@ -141,35 +142,41 @@ def start_log():
     return log_dictionary
 
 
-def append_log(json_path, sort_dict, sort_step, sort_type, append_list_value):
+def append_log(json_path, sort_dict, sort_step, sort_type,current_runtime, append_list_value):
     
     print(f"Sort Step {sort_step}")
 
     sort_step_string = str(sort_step)
     print(f"Sort Step String: {sort_step_string}")
 
-    sort_key = sort_step_string + "_" + sort_type
+    rounded_runtime = round(current_runtime, CONST_LOG_RUNTIME_PRECISION)
+    formatted_runtime = f"{rounded_runtime: .10f}"
+    print(f"runtime of step(rounded to the {CONST_LOG_RUNTIME_PRECISION} decimal place): {formatted_runtime}")
+
+    sort_key = sort_step_string + "_" + sort_type + "_" + formatted_runtime
     print(f"Sort Key: {sort_key}")
+
+    print(f"Algo's current runtime: {current_runtime}")
 
     #if sort_key not in sort_dict:
     #    sort_dict[sort_key] = []
 
-    #first_key = list(sort_dict)[0]
+    #dict_key = list(sort_dict)[0]
 
-    first_key = get_first_key(sort_dict)
-    print(f"first_key:before: {first_key}")
+    dict_key = get_first_key(sort_dict)                             #Grabbing so it can check if the log is new
+    print(f"dict_key:before: {dict_key}")                           
 
-    if(first_key == CONST_NEWLOG_NAME):
-        sort_dict[sort_key] = sort_dict.pop(CONST_NEWLOG_NAME)
+    if(dict_key == CONST_NEWLOG_NAME):                              #If the key of the dictionary is the new log key "99_newlog" 
+        sort_dict[sort_key] = sort_dict.pop(CONST_NEWLOG_NAME)      #This will change the first log key to the proper key for the sort algorithm
 
     #sort_dict[sort_key] = 
 
-    first_key = get_first_key(sort_dict)
-    print(f"first_key:after: {first_key}")
+    dict_key = get_first_key(sort_dict)                             #Grabs the key again to check and see if it was a new log
+    print(f"dict_key:after: {dict_key}")                            #Mostly for debugging purposes
     #first_val = list(sort_dict.values())[0]
     #print(first_val)
 
-    sort_dict[first_key] = append_list_value
+    sort_dict[dict_key] = append_list_value
 
     new_val = list(sort_dict.values())[0]
 
@@ -188,6 +195,8 @@ def append_log(json_path, sort_dict, sort_step, sort_type, append_list_value):
 
     return sort_key
 
+#################################################################################
+
 """ def dict_append_log(json_path, packed_sort_dict):
 
     packed_sort_dict
@@ -203,22 +212,22 @@ def append_log(json_path, sort_dict, sort_step, sort_type, append_list_value):
     #if sort_key not in sort_dict:
     #    sort_dict[sort_key] = []
 
-    #first_key = list(sort_dict)[0]
+    #dict_key = list(sort_dict)[0]
 
-    first_key = get_first_key(sort_dict)
-    print(f"first_key:before: {first_key}")
+    dict_key = get_first_key(sort_dict)
+    print(f"dict_key:before: {dict_key}")
 
-    if(first_key == CONST_NEWLOG_NAME):
+    if(dict_key == CONST_NEWLOG_NAME):
         sort_dict[sort_key] = sort_dict.pop(CONST_NEWLOG_NAME)
 
     #sort_dict[sort_key] = 
 
-    first_key = get_first_key(sort_dict)
-    print(f"first_key:after: {first_key}")
+    dict_key = get_dict_key(sort_dict)
+    print(f"dict_key:after: {dict_key}")
     #first_val = list(sort_dict.values())[0]
     #print(first_val)
 
-    sort_dict[first_key] = append_list_value
+    sort_dict[dict_key] = append_list_value
 
     new_val = list(sort_dict.values())[0]
 
@@ -231,6 +240,7 @@ def append_log(json_path, sort_dict, sort_step, sort_type, append_list_value):
 
     return  """
 
+######################################################################################
 
 ####Packing data functions
 ####
@@ -255,9 +265,9 @@ def convert_list_to_tuple(sortlist_of_dict):
 
     sort_type = split_key[1]
 
-    #un_time = split_key[2]
+    run_time = split_key[2]
     
-    sortlist_tupple = (int(step_count),sort_type,value)
+    sortlist_tupple = (int(step_count),sort_type,run_time, value)
 
 
     return  sortlist_tupple
