@@ -144,6 +144,7 @@ def main_run_sorts(sort_input, algo_input, log, json_log_path, linear_target):
 root = Tk()
 root.title("Sorting Algorithm Project 1 Team 3")
 root.geometry('700x550')
+root.configure(bg="#303030")
 
 Label(root, text="Welcome to Our Sorting Algorithm Visualizer", font=("Courier New", 18, "bold"), wraplength=500, justify="center").pack()
 Label(root, text="Please enter a list of values to store in the array! Example: 90 45 2 1", font=("Courier New", 16), wraplength=500, justify="center", fg="pink").pack()
@@ -168,15 +169,15 @@ entry_field.grid(row=3, column=0, columnspan=2, pady=10)
 
 # Corrected label placement (column 0 instead of 1)
 find_value_label = Label(main_frame, text="Value to find (if needed):", font=("Courier New", 14))
-find_value_label.grid(row=4, column=0, sticky="w", padx=5)
+find_value_label.grid(row=4, column=0, sticky="w")
 
 # Entry box remains in column 1
-find_value_entry = Entry(main_frame, font=("Courier New", 14), width=10)
-find_value_entry.grid(row=4, column=1, sticky="w", padx=5)
+find_value_entry = Entry(main_frame, font=("Courier New", 14), width=4)
+find_value_entry.grid(row=4, column=1, sticky="w")
 
 
 # Randomizer Entry Fields (will be shown when random option is selected)
-min_label = Label(main_frame, text="Minimum Value:", font=("Courier New", 14), justify='left')
+min_label = Label(main_frame, text="Minimum Value:", font=("Courier New", 14))
 min_label.grid(row=5, column=0, sticky="w")
 
 min_entry = Entry(main_frame, font=("Courier New", 14), width=4)
