@@ -1,5 +1,19 @@
 from tkinter import *
 import random
+import json_handler as jhandler
+import algorithms as algo
+
+##Robbie's addition
+_current_input = []
+_num_of_algos = 5
+_current_algos = [0] * _num_of_algos
+_search_element = []
+
+
+
+def modify_globals():
+    global _current_input, _current_algos, _search_element
+##Robbie's addition end
 
 def submit_input():
     """Submit the user input and process it."""
@@ -9,8 +23,17 @@ def submit_input():
             # Convert the input string into a list of integers
             input_list = list(map(int, user_input.split()))
 
+            ###Robbie's change
+            #Collects data to be passed to controller loop -> handler -> visualizer
+            algo_list_values_to_sort = input_list
+            print(f"Value list: {algo_list_values_to_sort}")
+            algos_to_use = get_algos_to_run(v_linear,v_bubble,v_merge, v_quick, v_radix)
+            main_control(algos_to_use, algo_list_values_to_sort)
+            
+            ###Robbie's change end
+
             # Display Output on Terminal, can be redirected to a file
-            print("Input List:", input_list)
+            #print("Input List:", input_list)
         except ValueError:
             print("Please enter valid integers.")
     elif v.get() == 2:  # If the user wants randomized values within a specific range
@@ -20,14 +43,20 @@ def submit_input():
             number_of_elements = int(num_elements_entry.get())
             random_values = random.sample(range(min_value, max_value + 1), number_of_elements)
 
+            algo_list_values_to_sort = random_values
+            algos_to_use = get_algos_to_run(v_linear,v_bubble,v_merge, v_quick, v_radix)
+            main_control(algos_to_use, algo_list_values_to_sort)
+
             # Populate the entry field with the generated random list
             entry_field.delete(0, END)  # Clear the existing text in the entry field
             entry_field.insert(0, " ".join(map(str, random_values)))  # Insert the random list into the entry field
+
 
             # Display Output on Terminal, can be redirected to a file
             print("Random List:", random_values)
         except ValueError:
             print("Please enter valid numbers for min, max, and number of elements.")
+
 
 def generate_random_values():
     """Enable/disable random value entry fields based on the selection."""
@@ -45,6 +74,85 @@ def generate_random_values():
         min_label.grid_remove()
         max_label.grid_remove()
         num_elements_label.grid_remove()
+
+##Robbie's addition
+#Should pass along values from the checkboxes to determine which algos to run when submit is hit
+def get_algos_to_run(linear,bubble, merge, quick, radix):
+
+    algos_to_run = [int(linear.get()),int(bubble.get()),int(merge.get()),int(quick.get()),int(radix.get())]
+
+    print(f"Attempted conversion of bools to int: {algos_to_run}")
+
+    return algos_to_run
+
+
+def main_control(algorithms_to_run, value_to_sort):
+    print(f"Values that will be sorted: {value_to_sort}")
+    """ json_log_path = jhandler.create_json("log")
+    print(f"New log's path: {json_log_path}")
+
+    new_log = jhandler.start_log()
+    print(new_log)
+
+    new_key = algo.bubble_sort(algo.random_input(),new_log,json_log_path)
+    print(new_key)
+
+    print(new_log) """
+
+
+    new_json_path = jhandler.create_json("log")     #creates the new log to be written to
+    print(f"New json path: {new_json_path}")
+
+    new_log = jhandler.start_log()
+    print(new_log)
+
+    main_run_sorts(value_to_sort,algorithms_to_run,new_log,new_json_path,0)
+
+    return 0
+
+##Runs sorts based off of the input from the 
+#sort input = list of values to be sorted
+#algo_input = list of values to determine whether or not to run a given algorithm
+#log = the dictionary thats acting as the current log to be written to
+#json_log_path = path to the json log so program knows where it can access json
+#linear_target = target if linear search to use if linear search is being used
+#radix_exp = exponent to use if radix sort is being used
+
+def main_run_sorts(sort_input, algo_input, log, json_log_path, linear_target):
+    print("Checking to see which algorithm to run")
+    original_sort_list = sort_input
+    print(f"Algos to run: {algo_input}")
+
+    if(algo_input[0] == 1):
+        print("Executing Linear")
+        algo.linear_search(sort_input,linear_target)
+        sort_input = original_sort_list
+
+    if(algo_input[1] == 1):
+        print("Executing Bubble")
+        algo.bubble_sort(sort_input,log,json_log_path)
+        sort_input = original_sort_list
+
+    if(algo_input[2] == 1):
+        print("Executing merge")
+        algo.merge_sort(sort_input, log,json_log_path)
+        sort_input = original_sort_list
+
+    if(algo_input[3] == 1):
+        print("Executing Quick")
+        algo.quick_sort_data_collect(sort_input,json_log_path)
+        sort_input = original_sort_list
+
+    if(algo_input[4] == 1):
+        print("Executing Radix")
+        algo.radix_sort(sort_input,json_log_path)
+        sort_input = original_sort_list
+
+    return
+
+
+##Robbie's addition end
+
 
 root = Tk()
 root.title("Sorting Algorithm Project 1 Team 3")

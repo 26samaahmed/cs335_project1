@@ -22,27 +22,27 @@ import json_handler as jhandler
 #Data Collection Functionality -DONE
 
 def bubble_sort(value_list,log, json_log_path):
+    print(f"Bubble Sort start: {value_list}")
+
     n = len(value_list)
 
     current_sort_data = {}
 
     start_time = time.time()
     current_runtime = 0
-    
+    step_count = 0
 
     for i in range(n):
-
-        #Record data here
-        current_runtime = time.time()
-        #current_sort_data = jhandler.pack_data(i,"bubble",(current_runtime - start_time), students)
-        jhandler.append_log(json_log_path,log, i,"bubble", value_list)
-
         for j in range(0, n - i - 1):
+            step_count += 1
+
             if value_list[j] > value_list[j + 1]:  # Compare integers directly
                     value_list[j], value_list[j + 1] = value_list[j + 1], value_list[j]
 
-"""             if students[j][1] > students[j+1][1]:
-                students[j], students[j + 1] = students[j + 1], students[j] """
+            current_runtime = time.time() - start_time
+            jhandler.append_log(json_log_path,log, step_count,"bubble",current_runtime, value_list)      #Records data here
+
+    print(f"Bubble Sort end: {value_list}")
 
 
 #-------------------------------------------------
@@ -51,7 +51,7 @@ def bubble_sort(value_list,log, json_log_path):
 
 #Merge Sort
 #Data Collection Functionality - TODO
-def merge_sort(flights):
+def merge_sort_orig(value_list,log,json_log_path,):
 
     current_sort_data = {}
 
@@ -59,33 +59,101 @@ def merge_sort(flights):
     current_runtime = 0
 
 
-    if len(flights) > 1:
-        mid = len(flights) // 2 #Find the middle index
-        left_half = flights[:mid] #Divide list into halves
-        right_half = flights[mid:]
+    if len(value_list) > 1:
+        mid = len(value_list) // 2 #Find the middle index
+        left_half = value_list[:mid] #Divide list into halves
+        right_half = value_list[mid:]
 
         merge_sort(left_half)
         merge_sort(right_half)
 
         i = j = k = 0
+
+        current_runtime = time.time() - start_time
+        jhandler.append_log(json_log_path,log, i,"bubble",current_runtime, value_list)      #Records data here, original value order
+
         while i < len(left_half) and j < len(right_half):
+
             if left_half[i][1] < right_half[j][1]:
-                flights[k] = left_half[i]
+                value_list[k] = left_half[i]
                 i += 1
             else:
-                flights[k] = right_half[j]
+                value_list[k] = right_half[j]
                 j += 1
             k += 1
 
+            current_runtime = time.time() - start_time
+            jhandler.append_log(json_log_path,log, i,"bubble",current_runtime, value_list)      #Records data here
+
         while i < len(left_half):
-            flights[k] = left_half[i]
+            value_list[k] = left_half[i]
             i += 1
             k += 1
 
         while j < len(right_half):
-            flights[k] = right_half[j]
+            value_list[k] = right_half[j]
             j += 1
             k += 1
+
+
+
+def merge_sort(value_list, log, json_log_path, start_time=None):
+    if start_time is None:
+        start_time = time.time()  # Initialize start time only once
+
+    if len(value_list) > 1:
+        mid = len(value_list) // 2
+        left_half = value_list[:mid]
+        right_half = value_list[mid:]
+
+        # Log before splitting
+        current_runtime = time.time() - start_time
+        jhandler.append_log(json_log_path, log, -1, "mergesplit", current_runtime, value_list)
+
+        merge_sort(left_half, log, json_log_path, start_time)
+        merge_sort(right_half, log, json_log_path, start_time)
+
+        i = j = k = 0
+
+        # Log before merging two halves
+        current_runtime = time.time() - start_time
+        jhandler.append_log(json_log_path, log, -1, "mergestart", current_runtime, value_list)
+
+        while i < len(left_half) and j < len(right_half):
+            if left_half[i] < right_half[j]:
+                value_list[k] = left_half[i]
+                i += 1
+            else:
+                value_list[k] = right_half[j]
+                j += 1
+            k += 1
+
+            # Log during merging step
+            current_runtime = time.time() - start_time
+            jhandler.append_log(json_log_path, log, k, "mergecombine", current_runtime, value_list)
+
+        while i < len(left_half):
+            value_list[k] = left_half[i]
+            i += 1
+            k += 1
+
+            # Log remaining elements from left half
+            current_runtime = time.time() - start_time
+            jhandler.append_log(json_log_path, log, k, "mergeleft", current_runtime, value_list)
+
+        while j < len(right_half):
+            value_list[k] = right_half[j]
+            j += 1
+            k += 1
+
+            # Log remaining elements from right half
+            current_runtime = time.time() - start_time
+            jhandler.append_log(json_log_path, log, k, "mergeright", current_runtime, value_list)
+
+        # Log after full merge
+        current_runtime = time.time() - start_time
+        jhandler.append_log(json_log_path, log, -1, "mergecomplete", current_runtime, value_list)
+
 
 
 #-------------------------------------------------
@@ -102,7 +170,7 @@ def quick_sort(arr, side_string, step, start_time, json_log_path):
 
     step += 1
 
-    sort_type_string = "quick-" + side_string
+    sort_type_string = "quick" + side_string
 
     current_sort_data = jhandler.pack_data(step, sort_type_string, current_runtime, arr)
     jhandler.append_json(json_log_path, current_sort_data)
@@ -116,7 +184,7 @@ def quick_sort(arr, side_string, step, start_time, json_log_path):
     middle = [x for x in arr if x == pivot]
     right = [x for x in arr if x > pivot]
 
-    return quick_sort(left, "left", step, start_time,json_log_path) + middle + quick_sort(right, "right", step, start_time,json_log_path)
+    return quick_sort(left, "Left", step, start_time,json_log_path) + middle + quick_sort(right, "Right", step, start_time,json_log_path)
 
 
 def quick_sort_data_collect(arr,json_log_path):
