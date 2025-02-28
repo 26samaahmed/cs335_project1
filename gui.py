@@ -96,7 +96,15 @@ def main_control(algorithms_to_run, value_to_sort):
     new_log = jhandler.start_log()
     print(new_log)
 
-    main_run_sorts(value_to_sort,algorithms_to_run,new_log,new_json_path,0)
+    ###Issue with accessing the linear_search_target
+    #new_search_target = linear_search_target.get()
+    #new_search_target_int = int(new_search_target)
+    #print(new_search_target)
+
+    new_random_target = pick_random_target(value_to_sort)
+    print(f"Random Target: {new_random_target}")
+
+    main_run_sorts(value_to_sort,algorithms_to_run,new_log,new_json_path,new_random_target)
 
     return 0
 
@@ -115,7 +123,7 @@ def main_run_sorts(sort_input, algo_input, log, json_log_path, linear_target):
 
     if(algo_input[0] == 1):
         print("Executing Linear")
-        algo.linear_search(sort_input,linear_target)
+        algo.linear_search_data_collect(sort_input,linear_target,json_log_path,log)
         sort_input = original_sort_list
 
     if(algo_input[1] == 1):
@@ -130,15 +138,21 @@ def main_run_sorts(sort_input, algo_input, log, json_log_path, linear_target):
 
     if(algo_input[3] == 1):
         print("Executing Quick")
-        algo.quick_sort_data_collect(sort_input,json_log_path)
+        algo.quick_sort_data_collect(sort_input,json_log_path,log)
         sort_input = original_sort_list
 
     if(algo_input[4] == 1):
         print("Executing Radix")
-        algo.radix_sort(sort_input,json_log_path)
+        algo.radix_sort(sort_input,json_log_path,log)
         sort_input = original_sort_list
 
     return
+
+def pick_random_target(value_list):
+
+    rand_target = random.choice(value_list)
+
+    return rand_target
 
 
 root = Tk()
@@ -216,7 +230,6 @@ algorithm_frame.pack(padx=20, pady=20)
 linear_search = Checkbutton(algorithm_frame, text="Linear Search", font=("Courier New", 14), variable=v_linear)
 # if linear search is selected, we need to get the target value so add a new box to choose target value that needs to be found
 linear_search_target = Entry(algorithm_frame, font=("Courier New", 14), width=4)
-
 linear_search.grid(row=0, column=0, sticky="w", padx=10, pady=5)
 
 bubble_sort = Checkbutton(algorithm_frame, text="Bubble Sort", font=("Courier New", 14), variable=v_bubble)

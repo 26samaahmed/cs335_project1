@@ -192,19 +192,20 @@ def quick_sort(arr, side_string, step, start_time, json_log_path,log):
     jhandler.append_log(json_log_path,log,step,sort_type_string,current_runtime,right)
 
 
-    return quick_sort(left, "Left", step, start_time,json_log_path) + middle + quick_sort(right, "Right", step, start_time,json_log_path)
+    return quick_sort(left, "Left", step, start_time,json_log_path,log ) + middle + quick_sort(right, "Right", step, start_time,json_log_path, log)
 
 
 def quick_sort_data_collect(arr,json_log_path, log):
 
     start_time = time.time()
 
-    quick_sort_result = quick_sort(arr, "start" , 0, start_time,json_log_path,log)
+    quick_sort_result = quick_sort(arr, "Start" , 0, start_time,json_log_path,log)
 
-    #total_runtime = (time.time()) - start_time
+    total_runtime = (time.time()) - start_time
 
     #current_sort_data = jhandler.pack_data(999,"quick-complete",  total_runtime, quick_sort_result)
     #jhandler.append_json(json_log_path,current_sort_data)
+    jhandler.append_log(json_log_path,log,999,"quickEnd", total_runtime,quick_sort_result)
 
     return 
 
@@ -242,7 +243,7 @@ def counting_sort(arr, exp):
         arr[i] = output[i]  #Overwrite original array with sorted values
 
 
-def radix_sort(arr,json_log_path):
+def radix_sort(arr,json_log_path,log):
     #Least significant Digit Approach (LSD)
     #Find the maximum number to determine the number of digits
     max_num = max(arr)
@@ -264,6 +265,9 @@ def radix_sort(arr,json_log_path):
 
     #Continue sorting for each digit place value
     while max_num // exp > 0:
+
+        jhandler.append_log(json_log_path,log,step_count,"radix",current_runtime,arr)
+
         counting_sort(arr,exp)
         exp *= 10
 
@@ -285,7 +289,7 @@ def linear_search(L, T):
             return index
     return -1
 
-def linear_search_data_collect(list, target_element,json_log_path):
+def linear_search_data_collect(list, target_element,json_log_path,log):
 
     start_time = time.time()
     search_result = linear_search(list,target_element)
@@ -294,8 +298,8 @@ def linear_search_data_collect(list, target_element,json_log_path):
 
     data_tuple = (run_time, search_result, list)
 
-    jhandler.pack_data(search_result, "linear" ,run_time, list)         #for linear search we will replace the step with the index of the succesful 
-    jhandler.append_json(json_log_path,list)
+    #jhandler.pack_data(search_result, "linear" ,run_time, list)         #for linear search we will replace the step with the index of the succesful 
+    jhandler.append_log(json_log_path,log,search_result,"linear",run_time,list)
 
     return  data_tuple
 
